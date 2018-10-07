@@ -5,6 +5,7 @@ file_extensions:
   - todo
   - tasks
   - todolist.txt
+  - taskpaper
 scope: text.todo
 contexts:
   main:
