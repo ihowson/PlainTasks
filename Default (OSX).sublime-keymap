@@ -9,6 +9,8 @@
   { "keys": ["super+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+o"], "command": "plain_tasks_open_link","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["super+shift+r"], "command": "plain_tasks_goto_tag", "context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["super+ctrl+j"], "command": "plain_tasks_move_to_next", "context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["super+ctrl+k"], "command": "plain_tasks_move_to_previous", "context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["tab"], "command": "plain_task_insert_date", "context":
     [
       { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },

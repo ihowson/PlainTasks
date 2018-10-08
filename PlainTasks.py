@@ -1117,3 +1117,56 @@ class PlainTasksGotoTag(sublime_plugin.TextCommand):
         self.view.sel().clear()
         self.view.sel().add(self.tags[index])
         self.view.show(self.tags[index], True)
+
+class PlainTasksMoveToPrevious(sublime_plugin.TextCommand):
+    def run(self, edit):
+        for region in self.view.sel():
+            line = self.view.full_line(region)
+            line_contents = self.view.substr(line)
+            self.view.erase(edit, line)
+
+            # now, find the insertion point
+            # we want it above the current heading
+            projects = itertools.chain(*[self.view.lines(r) for r in self.view.find_by_selector('keyword.control.header.todo')])
+
+            point = 0  # index where insertion will occur
+            for r in projects:
+                if r.begin() < region.begin() and r.begin() > point:
+                    point = r.begin()
+
+            # walk backward to swallow any newlines
+            while self.view.substr(point - 2) == '\n' and point >= 2:
+                point -= 1
+
+            # insert the line right at the new location
+            self.view.insert(edit, point, '%s' % line_contents)
+
+            # put the cursor on it
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(point, point))
+
+class PlainTasksMoveToNext(sublime_plugin.TextCommand):
+    def run(self, edit):
+        for region in self.view.sel():
+            line = self.view.full_line(region)
+            line_contents = self.view.substr(line)
+            self.view.erase(edit, line)
+
+            # now, find the insertion point
+            # we want it below the next heading
+            projects = itertools.chain(*[self.view.lines(r) for r in self.view.find_by_selector('keyword.control.header.todo')])
+
+            point = self.view.size()  # index where insertion will occur
+            for r in projects:
+                if r.end() > region.end() and r.end() < point:
+                    point = r.end()
+
+            # # find the newline at the end of the heading
+            point += 1  # skip the trailing newline
+
+            # insert the line at the new location
+            self.view.insert(edit, point, '%s' % line_contents)
+
+            # put the cursor on it
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(point, point))
