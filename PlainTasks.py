@@ -1142,8 +1142,10 @@ class PlainTasksMoveToPrevious(sublime_plugin.TextCommand):
             self.view.insert(edit, point, '%s' % line_contents)
 
             # put the cursor on it
+            offset = region.begin() - point
             self.view.sel().clear()
-            self.view.sel().add(sublime.Region(point, point))
+            self.view.sel().add(sublime.Region(region.begin() - offset, region.end() - offset))
+            self.view.show(point)
 
 class PlainTasksMoveToNext(sublime_plugin.TextCommand):
     def run(self, edit):
